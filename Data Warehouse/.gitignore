@@ -1,0 +1,8 @@
+*.cfg
+*.zip
+*.log
+*.logs
+.env
+*error.log*
+*debug.log*
+*.pytest_cache
