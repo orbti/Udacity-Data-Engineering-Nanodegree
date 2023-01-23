@@ -57,10 +57,10 @@ staging_songs_table_create = ("""
         artist_id           VARCHAR SORTKEY DISTKEY,
         artist_latitude     VARCHAR,
         artist_longitude    VARCHAR,
-        artist_location     VARCHAR(500),
-        artist_name         VARCHAR(500),
+        artist_location     VARCHAR,
+        artist_name         VARCHAR,
         song_id             VARCHAR,
-        title               VARCHAR(500),
+        title               VARCHAR,
         duration            DECIMAL(10),
         year                INTEGER
     );
