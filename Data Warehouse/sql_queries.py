@@ -196,10 +196,10 @@ artist_table_insert = ("""
     INSERT INTO artists
         SELECT
             DISTINCT ss.artist_id   AS artist_id,
-            ss.artistName           AS artist_name,
-            ss.location             AS location,
-            ss.lattitude            AS lattitude,
-            ss.longitude            AS longitude
+            ss.artist_name          AS artist_name,
+            ss.artist_location      AS artist_location,
+            ss.artist_latitude      AS artist_latitude,
+            ss.artist_longitude     AS artist_longitude
         FROM staging_events AS se
         JOIN staging_songs AS ss ON se.artist=ss.artist_name
         WHERE se.page = 'NextSong'
