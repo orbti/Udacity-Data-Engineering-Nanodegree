@@ -30,11 +30,12 @@ time_table_drop = "DROP TABLE IF EXISTS time;"
 
 staging_events_table_create= ("""
     CREATE TABLE staging_events (
+        event_id        INT IDENTITY(0,1) NOT NULL,
         artist          VARCHAR,
         auth            VARCHAR,
         firstName       VARCHAR,
         gender          VARCHAR,
-        itemInSession   INTEGER,
+        itemInSession   INT,
         lastName        VARCHAR,
         length          DECIMAL(10),
         level           VARCHAR,
@@ -42,18 +43,18 @@ staging_events_table_create= ("""
         method          VARCHAR,
         page            VARCHAR,
         registration    BIGINT,
-        sessionId       INTEGER SORTKEY DISTKEY,
+        sessionId       INT SORTKEY DISTKEY,
         song            VARCHAR,
-        status          INTEGER,
+        status          INT,
         ts              TIMESTAMP,
         userAgent       VARCHAR,
-        userId          INTEGER
+        userId          INT
     );
 """)
 
 staging_songs_table_create = ("""
     CREATE TABLE staging_songs (
-        num_songs           INTEGER,
+        num_songs           INT,
         artist_id           VARCHAR SORTKEY DISTKEY,
         artist_latitude     VARCHAR,
         artist_longitude    VARCHAR,
@@ -62,19 +63,19 @@ staging_songs_table_create = ("""
         song_id             VARCHAR,
         title               VARCHAR,
         duration            DECIMAL(10),
-        year                INTEGER
+        year                INT
     );
 """)
 
 songplay_table_create = ("""
     CREATE TABLE song_plays (
-        song_play_id        INTEGER IDENTITY(0,1) NOT NULL SORTKEY,
+        song_play_id        INT IDENTITY(0,1) NOT NULL SORTKEY,
         start_time          TIMESTAMP NOT NULL,
-        user_id             INTEGER NOT NULL DISTKEY,
+        user_id             INT NOT NULL DISTKEY,
         level               VARCHAR NOT NULL,
-        song_id             INTEGER NOT NULL,
-        artist_id           INTEGER NOT NULL,
-        session_id          INTEGER NOT NULL,
+        song_id             VARCHAR NOT NULL,
+        artist_id           VARCHAR NOT NULL,
+        session_id          INT NOT NULL,
         location            VARCHAR, 
         user_agent          VARCHAR
     );
@@ -82,7 +83,7 @@ songplay_table_create = ("""
 
 user_table_create = ("""
     CREATE TABLE users (
-        user_id         INTEGER NOT NULL SORTKEY,
+        user_id         INT NOT NULL SORTKEY,
         first_name      VARCHAR(25) NOT NULL,
         last_name       VARCHAR(25) NOT NULL,
         gender          VARCHAR(10) NOT NULL,
@@ -92,17 +93,17 @@ user_table_create = ("""
 
 song_table_create = ("""
     CREATE TABLE songs (
-        song_id         INTEGER NOT NULL SORTKEY,
+        song_id         VARCHAR NOT NULL SORTKEY,
         title           VARCHAR NOT NULL,
-        artist_id       INTEGER NOT NULL,
-        year            INTEGER NOT NULL,
+        artist_id       VARCHAR NOT NULL,
+        year            INT NOT NULL,
         duration        FLOAT NOT NULL
     );
 """)
 
 artist_table_create = ("""
     CREATE TABLE artists (
-        artist_id       INTEGER NOT NULL SORTKEY,
+        artist_id       VARCHAR NOT NULL SORTKEY,
         artist_name     VARCHAR NOT NULL,
         location        VARCHAR,
         lattitude       VARCHAR,
@@ -113,12 +114,12 @@ artist_table_create = ("""
 time_table_create = ("""
     CREATE TABLE time (
         start_time      TIMESTAMP NOT NULL SORTKEY,
-        hour            INTEGER NOT NULL,
-        day             INTEGER NOT NULL,
-        week            INTEGER NOT NULL,
-        month           INTEGER NOT NULL,
-        year            INTEGER NOT NULL,
-        weekday         INTEGER NOT NULL
+        hour            INT NOT NULL,
+        day             INT NOT NULL,
+        week            INT NOT NULL,
+        month           INT NOT NULL,
+        year            INT NOT NULL,
+        weekday         INT NOT NULL
     )
 """)
 
@@ -142,7 +143,16 @@ staging_songs_copy = (f"""
 # FINAL TABLES
 
 songplay_table_insert = ("""
-    INSERT INTO song_plays
+    INSERT INTO song_plays(
+        start_time,
+        user_id,
+        level,
+        song_id,
+        artist_id,
+        session_id,
+        location, 
+        user_agent
+    )
         SELECT 
             DISTINCT se.ts      AS start_time,
             se.userId           AS user_id,
